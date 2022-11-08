@@ -1,4 +1,6 @@
+using System.Diagnostics;
 using System.Net.WebSockets;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,17 +33,23 @@ app.Map("/ws", async (context) =>
 
 async Task Echo(WebSocket webSocket)
 {
+    var c = new Stopwatch();
+    c.Start();
+    var i = 0;
     var buffer = new byte[1024 * 4];
     var receiveResult = await webSocket.ReceiveAsync(
         new ArraySegment<byte>(buffer), CancellationToken.None);
 
     while (!receiveResult.CloseStatus.HasValue)
     {
-        await webSocket.SendAsync(
-            new ArraySegment<byte>(buffer, 0, receiveResult.Count),
-            receiveResult.MessageType,
-            receiveResult.EndOfMessage,
-            CancellationToken.None);
+        i++;
+        if (i >= 60)
+        {
+            Console.WriteLine(c.ElapsedMilliseconds.ToString());
+            c.Reset();
+            c.Start();
+            i = 0;
+        }
 
         receiveResult = await webSocket.ReceiveAsync(
             new ArraySegment<byte>(buffer), CancellationToken.None);
