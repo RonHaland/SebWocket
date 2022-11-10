@@ -37,7 +37,7 @@ onload = (event) => {
     Loop();
     setInterval(async (a) => {
         if (socket !== null && socket.readyState === 1){
-            socket.send(`${player.name}:${player.x}:${player.y};`);
+            socket.send(`${player.name}:${player.x}:${player.y}:;`);
         };
         movePlayer();
     }, 1)
