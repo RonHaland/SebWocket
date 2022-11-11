@@ -8,8 +8,8 @@ socket.addEventListener('open', (event) => {
 
 // Listen for messages
 socket.addEventListener('message', (event) => {
-    console.log('Message from server ', event.data);
     let players = ("" + event.data).split(';').map(p => ({ name: p.split(':')[0], x: p.split(':')[1], y: p.split(':')[2] }));
+    console.log(players);
 });
 
 var frames = 0;
@@ -17,7 +17,7 @@ var frames = 0;
 const player = {
     x: 20,
     y: 20,
-    name: "ron2"
+    name: "ron1"
 };
 
 const otherPlayers = [];

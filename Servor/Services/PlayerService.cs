@@ -6,12 +6,12 @@ namespace Servor.Services
 {
     public class PlayerService : BackgroundService
     {
-        public PlayerService()
-        {
-            PlayerList = new();
-        }
+        private readonly PlayerManager _playerManager;
 
-        public Dictionary<string, Player> PlayerList { get; }
+        public PlayerService(PlayerManager playerManager)
+        {
+            _playerManager = playerManager;
+        }
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
@@ -19,15 +19,15 @@ namespace Servor.Services
             { 
                 while (true)
                 {
-                    foreach(var player in PlayerList.Values)
+                    foreach(var player in _playerManager.GetActivePlayers())
                     {
                         if (player.Connection.State != WebSocketState.Open && player.Connection.State != WebSocketState.Connecting)
                         {
-                            PlayerList.Remove(player.Name);
+                            await _playerManager.DisconnectPlayer(player.Name);
                             continue;
                         }
 
-                        var otherPlayers = PlayerList.Where(p => p.Key != player.Name).Select(p => $"{p.Value.Name}:{p.Value.X}:{p.Value.Y}");
+                        var otherPlayers = _playerManager.GetOtherActivePlayers(player.Name).Select(p => $"{p.Name}:{p.X}:{p.Y}");
                         var bytes = Encoding.UTF8.GetBytes(string.Join(";", otherPlayers));
 
                         await player.Connection.SendAsync(new ArraySegment<byte>(bytes), WebSocketMessageType.Binary, true, CancellationToken.None);
