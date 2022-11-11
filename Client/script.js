@@ -8,8 +8,22 @@ socket.addEventListener('open', (event) => {
 
 // Listen for messages
 socket.addEventListener('message', (event) => {
-    let players = ("" + event.data).split(';').map(p => ({ name: p.split(':')[0], x: p.split(':')[1], y: p.split(':')[2] }));
-    console.log(players);
+    event.data.text().then(t => {
+        console.log(t);
+        let players = ("" + t).split(';').map(p => ({ name: p.split(':')[0], x: p.split(':')[1], y: p.split(':')[2] }));
+        var newplayers = players.filter(p => otherPlayers.findIndex(f => f.name === p.name) === -1);
+        otherPlayers.forEach(p => {
+            var ind = players.findIndex(f => f.name === p.name);
+            if (ind >= 0){
+                p.x = (players[ind].x);
+                p.y = (players[ind].y);
+            }
+        });
+        if (newplayers.length)
+            otherPlayers.push(...newplayers);
+    });
+    //let players = ("" + event.data.text()).split(';').map(p => ({ name: p.split(':')[0], x: p.split(':')[1], y: p.split(':')[2] }));
+    console.log(otherPlayers);
 });
 
 var frames = 0;
@@ -17,7 +31,7 @@ var frames = 0;
 const player = {
     x: 20,
     y: 20,
-    name: "ron1"
+    name: "ron1" + Math.floor(Math.random() * 20)
 };
 
 const otherPlayers = [];
@@ -40,7 +54,7 @@ onload = (event) => {
             socket.send(`${player.name}:${player.x}:${player.y}:;`);
         };
         movePlayer();
-    }, 1)
+    }, 20);
 
     setInterval(async () => {
         console.log(frames);
@@ -52,8 +66,11 @@ onload = (event) => {
 
 const Loop = () => {
     drawCanvas(canvas);
+    otherPlayers.forEach(op => 
+        drawPlayer(canvas, op.x, op.y, true)
+    );
+
     drawPlayer(canvas, player.x, player.y, false);
-    drawPlayer(canvas, 50, 70, true);
     frames += 1;
 
     window.requestAnimationFrame(Loop);

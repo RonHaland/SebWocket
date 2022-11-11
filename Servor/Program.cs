@@ -1,6 +1,7 @@
 using Servor.Models;
 using Servor.Services;
 using System.Diagnostics;
+using System.Globalization;
 using System.Net.WebSockets;
 using System.Text;
 
@@ -23,7 +24,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseWebSockets();
-
+CultureInfo.CurrentCulture = new CultureInfo("en");
 var playerManager = app.Services.GetService<PlayerManager>();
 
 app.Map("/", async (context) =>

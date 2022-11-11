@@ -32,7 +32,7 @@ namespace Servor.Services
 
                         await player.Connection.SendAsync(new ArraySegment<byte>(bytes), WebSocketMessageType.Binary, true, CancellationToken.None);
                     }
-                    await Task.Delay(50);
+                    await Task.Delay(25);
                 }
             });
         }

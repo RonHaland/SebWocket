@@ -42,6 +42,7 @@ namespace Servor.Services
         {
             try
             {
+                Console.WriteLine("Connecting player {0}", name);
                 Player p;
                 if (_activePlayers.ContainsKey(name))
                 {
@@ -72,6 +73,7 @@ namespace Servor.Services
                     await player.Connection.CloseAsync(WebSocketCloseStatus.NormalClosure, "Disconnection requested", CancellationToken.None);
                 _disconnectedPlayers.Remove(name);
                 _disconnectedPlayers.Add(name, player);
+                _activePlayers.Remove(name);
             }
         }
 
