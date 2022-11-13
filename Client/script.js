@@ -1,30 +1,35 @@
-// Create WebSocket connection.
-const socket = new WebSocket('wss://localhost:7299');
+// // Create WebSocket connection.
+// socket = new WebSocket('wss://localhost:7299');
 
-// Connection opened
-socket.addEventListener('open', (event) => {
-    socket.send(`My name is ${player.name}.`);
-});
+// // Connection opened
+// socket.addEventListener('open', (event) => {
+//     socket.send(`My name is ${player.name}.`);
+// });
 
-// Listen for messages
-socket.addEventListener('message', (event) => {
-    event.data.text().then(t => {
-        console.log(t);
-        let players = ("" + t).split(';').map(p => ({ name: p.split(':')[0], x: p.split(':')[1], y: p.split(':')[2] }));
-        var newplayers = players.filter(p => otherPlayers.findIndex(f => f.name === p.name) === -1);
-        otherPlayers.forEach(p => {
-            var ind = players.findIndex(f => f.name === p.name);
-            if (ind >= 0){
-                p.x = (players[ind].x);
-                p.y = (players[ind].y);
-            }
-        });
-        if (newplayers.length)
-            otherPlayers.push(...newplayers);
-    });
-    //let players = ("" + event.data.text()).split(';').map(p => ({ name: p.split(':')[0], x: p.split(':')[1], y: p.split(':')[2] }));
-    console.log(otherPlayers);
-});
+// // Listen for messages
+// socket.addEventListener('message', (event) => {
+//     event.data.text().then(t => {
+//         //console.log(t);
+//         let players = ("" + t).split(';').map(p => ({ name: p.split(':')[0], x: p.split(':')[1], y: p.split(':')[2] }));
+//         var newplayers = players.filter(p => otherPlayers.findIndex(f => f.name === p.name) === -1);
+//         var disconnectedplayers = otherPlayers.filter(p => players.findIndex(f => f.name === p.name) === -1);
+//         otherPlayers.forEach(p => {
+//             var ind = players.findIndex(f => f.name === p.name);
+//             if (ind >= 0){
+//                 p.x = (players[ind].x);
+//                 p.y = (players[ind].y);
+//             }
+//         });
+//         if (disconnectedplayers.length);
+//             disconnectedplayers.forEach(dp => otherPlayers.splice(otherPlayers.indexOf(op => op.name == dp.name), 1));
+//         if (newplayers.length)
+//             otherPlayers.push(...newplayers);
+//     });
+//     //let players = ("" + event.data.text()).split(';').map(p => ({ name: p.split(':')[0], x: p.split(':')[1], y: p.split(':')[2] }));
+//     //console.log(otherPlayers);
+// });
+
+var socket;
 
 var frames = 0;
 
@@ -48,9 +53,10 @@ var canvas;
 
 onload = (event) => { 
     canvas = document.getElementById("canv");
-    Loop();
+    connectToServer();
+    loop();
     setInterval(async (a) => {
-        if (socket !== null && socket.readyState === 1){
+        if (socket !== undefined && socket.readyState === 1){
             socket.send(`${player.name}:${player.x}:${player.y}:;`);
         };
         movePlayer();
@@ -59,21 +65,26 @@ onload = (event) => {
     setInterval(async () => {
         console.log(frames);
         frames = 0;
-    }, 1000);
+        console.log(otherPlayers);
+        if (socket === undefined || socket.readyState === socket.CLOSED) {
+            console.log("connecting...");
+            connectToServer();
+        }
+    }, 2000);
 };
 
 //Loop
 
-const Loop = () => {
+const loop = () => {
     drawCanvas(canvas);
     otherPlayers.forEach(op => 
-        drawPlayer(canvas, op.x, op.y, true)
+        drawPlayer(canvas, op.x, op.y, true, op.name)
     );
 
-    drawPlayer(canvas, player.x, player.y, false);
+    drawPlayer(canvas, player.x, player.y, false, player.name);
     frames += 1;
 
-    window.requestAnimationFrame(Loop);
+    window.requestAnimationFrame(loop);
 }
 
 //key events

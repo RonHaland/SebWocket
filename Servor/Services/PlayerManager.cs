@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Servor.Services
 {
-    public class PlayerManager
+    public sealed class PlayerManager
     {
         private readonly Dictionary<string, Player> _activePlayers = new();
         private readonly Dictionary<string, Player> _disconnectedPlayers = new();

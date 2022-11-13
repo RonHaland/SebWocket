@@ -1,11 +1,10 @@
 ﻿using System.Globalization;
 using System.Net.WebSockets;
 using System.Text;
-using System.Xml.Linq;
 
 namespace Servor.Models;
 
-public class Player
+public sealed class Player
 {
     public Player(string name, WebSocket connection)
     {

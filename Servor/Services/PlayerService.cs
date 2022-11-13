@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Servor.Services
 {
-    public class PlayerService : BackgroundService
+    public sealed class PlayerService : BackgroundService
     {
         private readonly PlayerManager _playerManager;
 
@@ -33,6 +33,7 @@ namespace Servor.Services
                         await player.Connection.SendAsync(new ArraySegment<byte>(bytes), WebSocketMessageType.Binary, true, CancellationToken.None);
                     }
                     await Task.Delay(25);
+                    Console.ForegroundColor = ConsoleColor.Green;
                 }
             });
         }

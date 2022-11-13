@@ -1,3 +1,6 @@
+html, body {
+    margin: 0px;
+}
 #canv{
     margin:auto;
     display: block;
