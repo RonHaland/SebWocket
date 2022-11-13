@@ -34,9 +34,9 @@ var socket;
 var frames = 0;
 
 const player = {
-    x: 20,
-    y: 20,
-    name: "ron1" + Math.floor(Math.random() * 20)
+    x: 250,
+    y: 250,
+    name: "ron" + Math.floor(Math.random() * 20)
 };
 
 const otherPlayers = [];
@@ -58,7 +58,10 @@ onload = (event) => {
     setInterval(async (a) => {
         if (socket !== undefined && socket.readyState === 1){
             socket.send(`${player.name}:${player.x}:${player.y}:;`);
-        };
+        }
+        else if (otherPlayers.length){
+            otherPlayers.splice(0, otherPlayers.length);
+        }
         movePlayer();
     }, 20);
 
@@ -82,6 +85,7 @@ const loop = () => {
     );
 
     drawPlayer(canvas, player.x, player.y, false, player.name);
+    drawLevel2();
     frames += 1;
 
     window.requestAnimationFrame(loop);

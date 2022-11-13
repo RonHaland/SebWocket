@@ -34,6 +34,6 @@ app.Map("/", async (context) =>
         using var webSocket = await context.WebSockets.AcceptWebSocketAsync();
         await playerManager.ConnectPlayer(webSocket);
     }
-}).WithOpenApi();
+});
 
 app.Run();

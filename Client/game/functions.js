@@ -1,7 +1,7 @@
 const drawCanvas = (canvas) => {
     let ctx = canvas.getContext("2d");
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = "#aaa";
+    ctx.fillStyle = "rgb(118, 138, 100)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
 
@@ -13,7 +13,30 @@ const drawPlayer = (canvas, x, y, isOther = false, name = "unknown") => {
     ctx.fill();
     ctx.font = "11px verdana";
     ctx.textAlign = "center";
+    ctx.fillStyle = "#000";
     ctx.fillText(name, x, y - 20);
+}
+
+const drawLevel = () => {
+    let ctx = canvas.getContext("2d");
+    ctx.fillStyle = "#000";
+    level.forEach((row, ri) => row.forEach((wall, ci) => {
+        if (wall === "X"){
+            ctx.beginPath();
+            ctx.fillRect(10*ci, 10*ri, 10, 10);
+        };
+    }));
+}
+
+const drawLevel2 = () => {
+    let ctx = canvas.getContext("2d");
+    ctx.fillStyle = "#000";
+    for (var i = 0; i < level2.length; i ++){
+        if (level2[i] === "X"){
+            ctx.beginPath();
+            ctx.fillRect(10*(i%50), 10*Math.floor(i/50), 10, 10);
+        }
+    }
 }
 
 const movePlayer = (spd = 5) => {
