@@ -1,4 +1,5 @@
-const level = 
+/* eslint-disable prettier/prettier */
+export const level =
 [
     ["X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X" ],
     ["X","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","X" ],
@@ -52,7 +53,7 @@ const level =
     ["X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X" ]
 ]
 
-const level2 = 
+export const level2 = 
     "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" +
     "X000000000000000000X00000000000000000000000000000X" +
     "X000000000000000000X00000000000000000000000000000X" +
@@ -105,7 +106,7 @@ const level2 =
     "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
 
 
-level3 = 
+export const level3 = 
 `
 XXXXXXXXXXXXXXXXXXXXXX
 XXXXXXXXXXXXXXXXXX
