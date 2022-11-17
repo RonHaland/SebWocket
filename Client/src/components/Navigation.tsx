@@ -1,8 +1,23 @@
 import "./Nav.css";
 import { Grid } from "@mui/material";
 import { Link, Outlet } from "react-router-dom";
+import useFeatureEnabled from "../hooks/useFeatureEnabled";
+import useApiClient from "../hooks/useApiClient";
 
 const Navigation = () => {
+  const [gameEnabled, setGameEnabled] = useFeatureEnabled(() => {
+    let isOn = false;
+    useApiClient()
+      .get("up")
+      .then((response: { status: number }) => {
+        isOn = response.status === 200;
+        debugger;
+        setGameEnabled(isOn);
+      })
+      .catch((error: any) => console.warn(error));
+    return isOn;
+  });
+
   return (
     <>
       <div
@@ -44,6 +59,15 @@ const Navigation = () => {
                   Projects
                 </Link>
               </Grid>
+              {gameEnabled ? (
+                <Grid item>
+                  <Link to={"/game"} className={"navLink"}>
+                    Game
+                  </Link>
+                </Grid>
+              ) : (
+                <></>
+              )}
             </Grid>
           </Grid>
         </Grid>

@@ -1,9 +1,5 @@
-using Servor.Models;
 using Servor.Services;
-using System.Diagnostics;
 using System.Globalization;
-using System.Net.WebSockets;
-using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +7,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHostedService<PlayerService>();
 builder.Services.AddSingleton<PlayerManager>();
+builder.Services.AddCors();
 
 var app = builder.Build();
 
@@ -22,6 +19,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors(p => p.AllowAnyMethod().AllowAnyHeader().SetIsOriginAllowed((_) => true));
 
 app.UseWebSockets();
 CultureInfo.CurrentCulture = new CultureInfo("en");
@@ -35,5 +33,7 @@ app.Map("/", async (context) =>
         await playerManager.ConnectPlayer(webSocket);
     }
 });
+
+app.MapGet("/up", () => "");
 
 app.Run();
